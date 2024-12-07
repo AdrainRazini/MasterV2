@@ -180,7 +180,10 @@ end)
 createButton("TP PLAYERS GAME", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/TpPlayersGame"))()
 end)
-createSection("PODERES")
+createSection("CAMERA")
+createButton("VISOR NAME GAME", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/VisorNameGame"))()
+end)
 
 
 
