@@ -1,0 +1,135 @@
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local screenGui = Instance.new("ScreenGui", player.PlayerGui)
+local mainFrame = Instance.new("Frame")
+local scrollingFrame = Instance.new("ScrollingFrame")
+local uiListLayout = Instance.new("UIListLayout")
+local dragFrame = Instance.new("Frame")
+local minimizeButton = Instance.new("TextButton")
+
+local isActive = true
+local isMinimized = false
+local dragging = false
+local dragStart = Vector2.new()
+local startPos = UDim2.new()
+
+-- Configurações iniciais da GUI
+mainFrame.Size = UDim2.new(0.3, 0, 0.5, 0)
+mainFrame.Position = UDim2.new(0.7, 0, 0.1, 0)  -- Canto superior direito
+mainFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+mainFrame.Parent = screenGui
+
+scrollingFrame.Size = UDim2.new(1, 0, 1, -30)
+scrollingFrame.Position = UDim2.new(0, 0, 0, 30)
+scrollingFrame.ScrollBarThickness = 10
+scrollingFrame.Parent = mainFrame
+scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)  -- Inicializa a CanvasSize
+
+uiListLayout.FillDirection = Enum.FillDirection.Vertical
+uiListLayout.Parent = scrollingFrame
+
+dragFrame.Size = UDim2.new(1, 0, 0, 30)  -- Tamanho do cabeçalho para arrastar
+dragFrame.BackgroundColor3 = Color3.new(0.5, 0.5, 0.5)
+dragFrame.Parent = mainFrame
+
+minimizeButton.Size = UDim2.new(0.1, 0, 0.8, 0)
+minimizeButton.Position = UDim2.new(1, -40, 0.1, 0)
+minimizeButton.Text = "−"
+minimizeButton.Parent = dragFrame
+
+-- Função para teleportar o jogador alvo
+local function teleportarPara(jogadorAlvo)
+    if jogadorAlvo and jogadorAlvo.Character and jogadorAlvo.Character.PrimaryPart then
+        local alvoPosicao = jogadorAlvo.Character.PrimaryPart.Position + Vector3.new(0, 3, 0)
+        character:SetPrimaryPartCFrame(CFrame.new(alvoPosicao))
+    end
+end
+
+-- Função para atualizar a lista de jogadores
+local function atualizarListaDeJogadores()
+    for _, child in ipairs(scrollingFrame:GetChildren()) do
+        if child:IsA("TextButton") then
+            child:Destroy()
+        end
+    end
+
+    local totalHeight = 0  -- Para calcular a altura total
+
+    for _, jogador in ipairs(Players:GetPlayers()) do
+        if jogador ~= player then
+            local button = Instance.new("TextButton")
+            button.Size = UDim2.new(1, 0, 0, 50)
+            button.Text = jogador.Name
+            button.Parent = scrollingFrame
+
+            button.MouseButton1Click:Connect(function()
+                teleportarPara(jogador)
+            end)
+
+            totalHeight = totalHeight + 50  -- Adiciona a altura do botão à altura total
+        end
+    end
+
+    if #scrollingFrame:GetChildren() == 0 then
+        local msg = Instance.new("TextLabel")
+        msg.Size = UDim2.new(1, 0, 1, 0)
+        msg.Text = "Nenhum jogador disponível"
+        msg.TextScaled = true
+        msg.BackgroundTransparency = 1
+        msg.Parent = scrollingFrame
+    end
+
+    scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, totalHeight)  -- Atualiza o CanvasSize
+end
+
+-- Função para criar a GUI
+local function criarGUI()
+    -- Configuração do arrasto
+    dragFrame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = mainFrame.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - dragStart
+            mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+
+    minimizeButton.MouseButton1Click:Connect(function()
+        isMinimized = not isMinimized
+        scrollingFrame.Visible = not isMinimized
+        minimizeButton.Text = isMinimized and "+" or "−"
+
+        if isMinimized then
+            mainFrame.Size = UDim2.new(0.1, 0, 0.1, 0)  -- Reduzir tamanho da GUI para um quadrado pequeno
+            mainFrame.Position = UDim2.new(0.7, 0, 0.1, 0)  -- Manter no canto superior direito
+        else
+            mainFrame.Size = UDim2.new(0.3, 0, 0.5, 0)  -- Restaurar tamanho original
+            mainFrame.Position = UDim2.new(0.7, 0, 0.1, 0)  -- Manter no canto superior direito
+        end
+    end)
+end
+
+-- Chama a criação da GUI
+criarGUI()
+
+-- Atualiza a lista de jogadores a cada segundo
+while isActive do
+    wait(1)
+    atualizarListaDeJogadores()
+end
