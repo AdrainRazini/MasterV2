@@ -161,6 +161,9 @@ end)
 createButton("CLONE ITENS", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/Clone"))()
 end)
+createButton("DELETAR ITENS", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/Deletar"))()
+end)
 -- Continue adding other sections and buttons as needed
 
 -- Update Canvas Size based on added content
