@@ -152,7 +152,7 @@ local function createButton(text, callback)
     Button.MouseButton1Click:Connect(callback)
 end
 
--- Creating categories and adding buttons
+-- Criação do inventario Hack
 createSection("INVENTÁRIO")
 
 createButton("INVENTÁRIO", function()
@@ -164,9 +164,17 @@ end)
 createButton("DELETAR ITENS", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/Deletar"))()
 end)
--- Continue adding other sections and buttons as needed
 
--- Update Canvas Size based on added content
+-- Criação dos Poderes Script
+
+createSection("TELEPORTE")
+
+
+createSection("PODERES")
+
+
+
+-- Canvas dos botões
 local function updateCanvasSize()
     local totalHeight = 0
     for _, item in pairs(Content:GetChildren()) do
