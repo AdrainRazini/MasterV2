@@ -169,6 +169,9 @@ end)
 
 createSection("TELEPORTE")
 
+createButton("TP CORDENADAS", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/CordenadasTp"))()
+end)
 
 createSection("PODERES")
 
