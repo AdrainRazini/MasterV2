@@ -156,7 +156,7 @@ end
 createSection("INVENTÁRIO")
 
 createButton("INVENTÁRIO", function()
-    loadstring(game:HttpGet(""))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/Inventario"))()
 end)
 
 -- Continue adding other sections and buttons as needed
