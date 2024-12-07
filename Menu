@@ -158,7 +158,9 @@ createSection("INVENTÁRIO")
 createButton("INVENTÁRIO", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/Inventario"))()
 end)
-
+createButton("CLONE ITENS", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/Clone"))()
+end)
 -- Continue adding other sections and buttons as needed
 
 -- Update Canvas Size based on added content
