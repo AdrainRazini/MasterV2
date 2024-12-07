@@ -177,6 +177,9 @@ end)
 createButton("TP PLAYERS NAME", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/TpPlayersName"))()
 end)
+createButton("TP PLAYERS GAME", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/TpPlayersGame"))()
+end)
 createSection("PODERES")
 
 
