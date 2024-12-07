@@ -1,0 +1,55 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+local proximityDistance = 10  -- Distância para ativar a tag
+local nameTags = {}
+
+-- Função para criar a BillboardGui
+local function createNameTag(object)
+    local billboardGui = Instance.new("BillboardGui")
+    billboardGui.Size = UDim2.new(0, 100, 0, 50)
+    billboardGui.Adornee = object
+    billboardGui.AlwaysOnTop = true
+    billboardGui.Enabled = false  -- Inicialmente oculto
+
+    local textLabel = Instance.new("TextLabel", billboardGui)
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.Text = object.Name
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextColor3 = Color3.new(1, 1, 1)
+    textLabel.TextStrokeTransparency = 0.5  -- Adiciona contorno ao texto
+
+    billboardGui.Parent = object
+    return billboardGui
+end
+
+-- Função para atualizar a visibilidade das tags
+local function updateNameTags()
+    -- Conectar ao Heartbeat para garantir atualizações contínuas, mas de forma eficiente
+    game:GetService("RunService").Heartbeat:Connect(function()
+        local characterPosition = humanoidRootPart.Position
+
+        -- Iterar apenas sobre as partes no workspace
+        for _, object in pairs(workspace:GetDescendants()) do
+            if object:IsA("BasePart") then
+                local distance = (characterPosition - object.Position).magnitude
+
+                -- Se o objeto estiver dentro da distância definida
+                if distance < proximityDistance then
+                    if not nameTags[object] then
+                        nameTags[object] = createNameTag(object)
+                    end
+                    nameTags[object].Enabled = true  -- Mostrar a tag
+                else
+                    if nameTags[object] then
+                        nameTags[object].Enabled = false  -- Ocultar a tag
+                    end
+                end
+            end
+        end
+    end)
+end
+
+-- Inicia a atualização das tags
+updateNameTags()
