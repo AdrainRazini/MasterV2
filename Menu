@@ -155,6 +155,10 @@ end
 -- Creating categories and adding buttons
 createSection("INVENTÁRIO")
 
+createButton("INVENTÁRIO", function()
+    loadstring(game:HttpGet(""))()
+end)
+
 -- Continue adding other sections and buttons as needed
 
 -- Update Canvas Size based on added content
