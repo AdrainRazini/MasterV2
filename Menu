@@ -168,7 +168,9 @@ end)
 -- Criação dos Poderes Script
 
 createSection("TELEPORTE")
-
+createButton("MOSTRAR CORDENADAS", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/Cordenadas"))()
+end)
 createButton("TP CORDENADAS", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AdrainRazini/MasterV2/refs/heads/main/CordenadasTp"))()
 end)
